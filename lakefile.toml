@@ -1,0 +1,11 @@
+name = "scoped-effects"
+defaultTargets = ["ScopedEffects"]
+leanOptions = [["autoImplicit", false]]
+
+[[require]]
+name = "batteries"
+git = "https://github.com/leanprover-community/batteries"
+rev = "v4.10.0-rc2"
+
+[[lean_lib]]
+name = "ScopedEffects"
