@@ -1,4 +1,5 @@
 import ScopedEffects.Prog
+import ScopedEffects.Effect.Named
 
 namespace ScopedEffects
 
@@ -36,6 +37,10 @@ def runState (s : σ) (x : Prog (State σ :: es) α) : Prog es (α × σ) :=
         | .inr x =>
           .scope (n := 0) x.1 λ i ↦ Prog'.zip (m := 1) <| (λ (f, s) ↦ f s) <$> (x.2 i s))
   f x s
+
+@[inline]
+def runStateNamed (name : Lean.Name) (s : σ) (x : Prog (Named name (State σ) :: es) α) : Prog es (α × σ) :=
+  runState s x
 
 @[inline]
 def get (σ : Type _) [Mem (State σ) es] : Prog es σ :=

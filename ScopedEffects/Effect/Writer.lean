@@ -1,4 +1,5 @@
 import ScopedEffects.Prog
+import ScopedEffects.Effect.Named
 
 namespace ScopedEffects
 
@@ -38,6 +39,13 @@ def runWriter (empty : ω) (append : ω → ω → ω) (x : Prog (Writer ω :: e
           Prog'.scope x.1 λ i ↦
             Prog'.zip (m := 1) <| Prog'.map _ (λ | (f, x) => f x) (x.2 i s))
   f x empty
+
+@[inline]
+def runWriterNamed
+  (name : Lean.Name)
+  (empty : ω) (append : ω → ω → ω)
+  (x : Prog (Named name (Writer ω) :: es) α) : Prog es (α × ω) :=
+    runWriter empty append x
 
 @[inline]
 def tell [Mem (Writer ω) es] (value : ω) : Prog es PUnit :=

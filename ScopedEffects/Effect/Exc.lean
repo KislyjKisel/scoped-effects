@@ -1,4 +1,5 @@
 import ScopedEffects.Prog
+import ScopedEffects.Effect.Named
 
 namespace ScopedEffects
 
@@ -41,6 +42,10 @@ def runExc (ε : Type _) : Prog (Exc ε :: es) α → Prog es (Except ε α) :=
           Prog'.zip (m := 1) <| Prog'.map _
             (λ | .ok x => x | .error e => Prog'.pure (.error e))
             (x.2 i))
+
+@[inline]
+def runExcNamed (name : Lean.Name) (ε : Type _) : Prog (Named name (Exc ε) :: es) α → Prog es (Except ε α) :=
+  runExc ε
 
 @[inline]
 def throw [Mem (Exc ε) es] (e : ε) : Prog es α :=

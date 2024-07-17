@@ -1,4 +1,5 @@
 import ScopedEffects.Prog
+import ScopedEffects.Effect.Named
 
 namespace ScopedEffects
 
@@ -38,6 +39,10 @@ def runReader (r : ρ) (x : Prog (Reader ρ :: es) α) : Prog es α :=
           Prog'.scope x.1 λ i ↦
             Prog'.zip (m := 1) <| Prog'.map _ (λ | x => x r) (x.2 i r))
   f x r
+
+@[inline]
+def runReaderNamed (name : Lean.Name) (r : ρ) (x : Prog (Named name (Reader ρ) :: es) α) : Prog es α :=
+  runReader r x
 
 @[inline]
 def ask (ρ : Type _) [Mem (Reader ρ) es] : Prog es ρ :=
