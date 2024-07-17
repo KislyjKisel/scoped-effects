@@ -4,7 +4,7 @@ import ScopedEffects.Effect.State
 import ScopedEffects.Effect.Exc
 import ScopedEffects.Effect.Reader
 
-open ScopedEffects
+-- open ScopedEffects
 
 -- variable {es : List Effect}
 

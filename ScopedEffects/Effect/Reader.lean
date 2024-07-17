@@ -13,15 +13,15 @@ def Reader.OperationsPosition (ρ : Type _) : OperationsShape → Type _
 inductive Reader.ScopesShape (ρ : Type _) where
 | local (f : ρ → ρ)
 
-def Reader.ScopesPosition (_ : ScopesShape ρ) : Type _ :=
-  PUnit
+def Reader.ScopesPosition : ScopesShape ρ → Type _
+| .local _ => PUnit
 
 def Reader (ρ : Type _) : Effect where
   Operations := ⟨Reader.OperationsShape, Reader.OperationsPosition ρ⟩
   Scopes := ⟨Reader.ScopesShape ρ, Reader.ScopesPosition⟩
 
 @[inline]
-def runReader (r : ρ) (x : Prog (Reader ρ :: es) α) : Prog es (α) :=
+def runReader (r : ρ) (x : Prog (Reader ρ :: es) α) : Prog es α :=
   let f :=
     Prog'.foldP (λ n ↦ n.repeat (λ x ↦ ρ → Prog es x) α) 1
       id
@@ -41,7 +41,7 @@ def runReader (r : ρ) (x : Prog (Reader ρ :: es) α) : Prog es (α) :=
 
 @[inline]
 def ask (ρ : Type _) [Mem (Reader ρ) es] : Prog es ρ :=
-  .mkOp (Reader ρ) .ask λ x ↦ pure x
+  .mkOp (Reader ρ) .ask pure
 
 @[inline]
 def «local» [Mem (Reader ρ) es] (f : ρ → ρ) (x : Prog es α) : Prog es α :=
